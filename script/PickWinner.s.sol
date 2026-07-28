@@ -14,6 +14,11 @@ contract PickWinner is Script {
         uint256 subId = 55206376089722866173607361604040006654327088597510986890647459072094280452587;
 
         vm.startBroadcast(account);
+        vm.warp(block.timestamp + 31);
+        vm.roll(block.number + 1);
+
+        LotteryProject(payable(lotteryAddress)).performUpkeep("");
+        
         VRFCoordinatorV2_5Mock(vrfCoordinatorMock).fundSubscription(subId, 100 ether);
         VRFCoordinatorV2_5Mock(vrfCoordinatorMock).fulfillRandomWords(1, lotteryAddress);
         vm.stopBroadcast();

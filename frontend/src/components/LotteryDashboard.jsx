@@ -30,8 +30,31 @@ export function LotteryDashboard() {
     functionName: "getLotteryProjectState",
   });
 
+  const poolEth = (numPlayers && entranceFee) ? formatEther((numPlayers) * (entranceFee)) : "0.00";
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+    <div className="flex flex-col gap-6 mb-12">
+      {/* Live Jackpot Hero Banner */}
+      <div className="glass-card rounded-3xl p-8 relative overflow-hidden border border-yellow-500/20 shadow-[0_0_50px_rgba(234,179,8,0.15)] bg-gradient-to-r from-yellow-950/20 via-violet-950/30 to-fuchsia-950/20">
+        <div className="absolute top-4 right-4 flex items-center gap-2 bg-green-500/10 border border-green-500/30 px-3 py-1 rounded-full text-xs font-semibold text-green-400">
+          <span className="w-2 h-2 rounded-full bg-green-400 animate-ping" />
+          <span>Active Pool Live</span>
+        </div>
+        <div className="flex flex-col items-center justify-center text-center">
+          <span className="text-sm font-bold uppercase tracking-widest text-yellow-400/90 mb-1">
+            Current Estimated Jackpot
+          </span>
+          <div className="text-5xl md:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 drop-shadow-[0_0_20px_rgba(234,179,8,0.4)] my-2">
+            {poolEth} ETH
+          </div>
+          <p className="text-zinc-400 text-sm">
+            Winner gets <span className="text-green-400 font-semibold">95% of total pool</span> upon automated draw
+          </p>
+        </div>
+      </div>
+
+      {/* Grid Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {/* Entrance Fee */}
       <div className="glass-card rounded-2xl p-6 flex flex-col items-center justify-center text-center">
         <Coins className="w-10 h-10 text-violet-400 mb-3" />
