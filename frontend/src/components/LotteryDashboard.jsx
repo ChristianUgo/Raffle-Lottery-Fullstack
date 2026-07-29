@@ -107,5 +107,6 @@ export function LotteryDashboard() {
         </p>
       </div>
     </div>
+    </div>
   );
 }
