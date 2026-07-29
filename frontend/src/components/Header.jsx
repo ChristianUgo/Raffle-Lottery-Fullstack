@@ -10,7 +10,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <Dices className="text-violet-500 w-8 h-8" />
           <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-500">
-            Cyfrin LotteryProject
+            VerifiDraw Lottery
           </h1>
         </div>
         <div>

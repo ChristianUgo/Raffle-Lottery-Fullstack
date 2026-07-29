@@ -7,16 +7,16 @@ import {
   darkTheme,
 } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
-import { mainnet, sepolia, foundry } from "wagmi/chains";
+import { polygonAmoy } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import "@rainbow-me/rainbowkit/styles.css";
 
 const config = getDefaultConfig({
-  appName: "Cyfrin LotteryProject",
-  // A 32-character hex string is required for WalletConnect v2. 
-  // Get one for free at https://cloud.reown.com
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "YOUR_PROJECT_ID_HERE",
-  chains: [foundry, sepolia, mainnet],
+  appName: "VerifiDraw Lottery",
+  projectId:
+    process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ||
+    "00000000000000000000000000000000",
+  chains: [polygonAmoy],
   ssr: true, // Server-side rendering support
 });
 

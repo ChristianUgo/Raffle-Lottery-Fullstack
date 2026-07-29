@@ -2,8 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useWriteContract, useWaitForTransactionReceipt, useReadContract } from "wagmi";
-import { LOTTERY_PROJECT_ABI, LOTTERY_PROJECT_CONTRACT_ADDRESS } from "@/constants";
-import { parseEther, formatEther } from "viem";
+import {
+  LOTTERY_PROJECT_ABI,
+  LOTTERY_PROJECT_CONTRACT_ADDRESS,
+  LOTTERY_PROJECT_IS_CONFIGURED,
+} from "@/constants";
+import { formatEther } from "viem";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
@@ -15,6 +19,7 @@ export function EnterLottery() {
     address: LOTTERY_PROJECT_CONTRACT_ADDRESS,
     abi: LOTTERY_PROJECT_ABI,
     functionName: "getEntranceFee",
+    query: { enabled: LOTTERY_PROJECT_IS_CONFIGURED },
   });
 
   const { data: hash, isPending, writeContract, error } = useWriteContract();
@@ -48,6 +53,10 @@ export function EnterLottery() {
   }, [error]);
 
   const handleEnter = async () => {
+    if (!LOTTERY_PROJECT_IS_CONFIGURED) {
+      toast.error("The Polygon Amoy lottery contract is not configured yet.");
+      return;
+    }
     if (!entranceFee) return;
     const totalCost = (entranceFee ) * BigInt(tickets);
 
@@ -60,7 +69,7 @@ export function EnterLottery() {
   };
 
   const isLoading = isPending || isConfirming;
-  const costInEth = entranceFee ? formatEther((entranceFee ) * BigInt(tickets)) : "0";
+  const costInPol = entranceFee ? formatEther((entranceFee ) * BigInt(tickets)) : "0";
 
   return (
     <div className="flex flex-col items-center justify-center p-8 glass-card rounded-3xl max-w-lg mx-auto relative overflow-hidden">
@@ -114,7 +123,7 @@ export function EnterLottery() {
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           onClick={handleEnter}
-          disabled={isLoading || !entranceFee}
+          disabled={isLoading || !entranceFee || !LOTTERY_PROJECT_IS_CONFIGURED}
           className="w-full py-4 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 font-bold text-lg hover:shadow-[0_0_35px_rgba(168,85,247,0.6)] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed border border-white/20"
         >
           {isLoading ? (
@@ -123,9 +132,17 @@ export function EnterLottery() {
               <span>Processing Transaction...</span>
             </div>
           ) : (
-            `Pay ${costInEth} ETH`
+            LOTTERY_PROJECT_IS_CONFIGURED
+              ? `Pay ${costInPol} POL`
+              : "Testnet contract pending"
           )}
         </motion.button>
+        {!LOTTERY_PROJECT_IS_CONFIGURED && (
+          <p className="mt-4 text-center text-sm text-amber-300">
+            The public interface is live. Ticket purchases will unlock after
+            the verified Polygon Amoy VRF contract is connected.
+          </p>
+        )}
       </div>
     </div>
   );

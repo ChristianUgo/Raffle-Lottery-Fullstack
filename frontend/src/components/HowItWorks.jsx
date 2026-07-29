@@ -17,7 +17,7 @@ export function HowItWorks() {
     {
       icon: <ShieldCheck className="w-8 h-8 text-green-400" />,
       title: "3. Automated Payouts",
-      description: "Chainlink Automation triggers the smart contract to automatically pick the winner and transfer the entire prize pool instantly. No human intervention."
+      description: "When the draw becomes eligible, the smart contract requests verifiable randomness and pays the winner onchain without discretionary control."
     }
   ];
 

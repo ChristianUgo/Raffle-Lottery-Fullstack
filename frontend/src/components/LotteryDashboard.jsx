@@ -1,7 +1,11 @@
 "use client";
 
 import { useReadContract } from "wagmi";
-import { LOTTERY_PROJECT_ABI, LOTTERY_PROJECT_CONTRACT_ADDRESS } from "@/constants";
+import {
+  LOTTERY_PROJECT_ABI,
+  LOTTERY_PROJECT_CONTRACT_ADDRESS,
+  LOTTERY_PROJECT_IS_CONFIGURED,
+} from "@/constants";
 import { formatEther } from "viem";
 import { Users, Coins, Clock, Trophy } from "lucide-react";
 
@@ -10,27 +14,31 @@ export function LotteryDashboard() {
     address: LOTTERY_PROJECT_CONTRACT_ADDRESS,
     abi: LOTTERY_PROJECT_ABI,
     functionName: "getEntranceFee",
+    query: { enabled: LOTTERY_PROJECT_IS_CONFIGURED },
   });
 
   const { data: numPlayers } = useReadContract({
     address: LOTTERY_PROJECT_CONTRACT_ADDRESS,
     abi: LOTTERY_PROJECT_ABI,
     functionName: "getNumberOfPlayers",
+    query: { enabled: LOTTERY_PROJECT_IS_CONFIGURED },
   });
 
   const { data: recentWinner } = useReadContract({
     address: LOTTERY_PROJECT_CONTRACT_ADDRESS,
     abi: LOTTERY_PROJECT_ABI,
     functionName: "getRecentWinner",
+    query: { enabled: LOTTERY_PROJECT_IS_CONFIGURED },
   });
 
   const { data: lotteryState } = useReadContract({
     address: LOTTERY_PROJECT_CONTRACT_ADDRESS,
     abi: LOTTERY_PROJECT_ABI,
     functionName: "getLotteryProjectState",
+    query: { enabled: LOTTERY_PROJECT_IS_CONFIGURED },
   });
 
-  const poolEth = (numPlayers && entranceFee) ? formatEther((numPlayers) * (entranceFee)) : "0.00";
+  const poolPol = (numPlayers && entranceFee) ? formatEther((numPlayers) * (entranceFee)) : "0.00";
 
   return (
     <div className="flex flex-col gap-6 mb-12">
@@ -45,7 +53,7 @@ export function LotteryDashboard() {
             Current Estimated Jackpot
           </span>
           <div className="text-5xl md:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 drop-shadow-[0_0_20px_rgba(234,179,8,0.4)] my-2">
-            {poolEth} ETH
+            {poolPol} POL
           </div>
           <p className="text-zinc-400 text-sm">
             Winner gets <span className="text-green-400 font-semibold">95% of total pool</span> upon automated draw
@@ -60,7 +68,7 @@ export function LotteryDashboard() {
         <Coins className="w-10 h-10 text-violet-400 mb-3" />
         <h3 className="text-zinc-400 font-medium mb-1">Entrance Fee</h3>
         <p className="text-2xl font-bold">
-          {entranceFee ? formatEther(entranceFee ) : "0.0"} ETH
+          {entranceFee ? formatEther(entranceFee ) : "0.0"} POL
         </p>
       </div>
 
@@ -76,9 +84,15 @@ export function LotteryDashboard() {
       {/* LotteryProject State */}
       <div className="glass-card rounded-2xl p-6 flex flex-col items-center justify-center text-center">
         <Clock className="w-10 h-10 text-fuchsia-400 mb-3" />
-        <h3 className="text-zinc-400 font-medium mb-1">LotteryProject State</h3>
+        <h3 className="text-zinc-400 font-medium mb-1">Lottery State</h3>
         <p className="text-2xl font-bold">
-          {lotteryState === 0 ? "Open" : lotteryState === 1 ? "Calculating" : "Loading..."}
+          {!LOTTERY_PROJECT_IS_CONFIGURED
+            ? "Pending"
+            : lotteryState === 0
+              ? "Open"
+              : lotteryState === 1
+                ? "Calculating"
+                : "Loading..."}
         </p>
       </div>
 

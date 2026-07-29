@@ -59,7 +59,7 @@ export default function Home() {
             </span>
           </h2>
           <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto">
-            Connect your wallet to enter the transparent, VRF-powered smart contract lottery.
+            Connect your wallet to enter the transparent, VRF-powered Polygon Amoy lottery.
             Purchase tickets and win the prize pool!
           </p>
         </motion.div>

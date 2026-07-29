@@ -1,7 +1,11 @@
 "use client";
 
 import { useReadContract } from "wagmi";
-import { LOTTERY_PROJECT_ABI, LOTTERY_PROJECT_CONTRACT_ADDRESS } from "@/constants";
+import {
+  LOTTERY_PROJECT_ABI,
+  LOTTERY_PROJECT_CONTRACT_ADDRESS,
+  LOTTERY_PROJECT_IS_CONFIGURED,
+} from "@/constants";
 import { formatEther } from "viem";
 import { Award, CheckCircle2, History, Ghost } from "lucide-react";
 
@@ -10,6 +14,7 @@ export function HallOfFame() {
     address: LOTTERY_PROJECT_CONTRACT_ADDRESS,
     abi: LOTTERY_PROJECT_ABI,
     functionName: "getPastWinners",
+    query: { enabled: LOTTERY_PROJECT_IS_CONFIGURED },
   });
 
   const winners = pastWinners || [];
@@ -53,7 +58,7 @@ export function HallOfFame() {
                         {addr ? `${addr.substring(0, 8)}...${addr.substring(36)}` : "N/A"}
                       </td>
                       <td className="p-5 font-bold text-green-400 text-right">
-                        {formatEther(amount)} ETH
+                        {formatEther(amount)} POL
                       </td>
                       <td className="p-5">
                         <div className="flex items-center justify-center gap-2 text-green-400 bg-green-400/10 px-3 py-1 rounded-full w-max mx-auto text-sm font-medium">

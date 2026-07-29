@@ -7,8 +7,9 @@ import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Cyfrin LotteryProject",
-  description: "A modern, secure Web3 lottery application",
+  title: "VerifiDraw | Chainlink VRF Lottery",
+  description:
+    "A transparent Polygon Amoy lottery powered by Chainlink VRF.",
 };
 
 export default function RootLayout({
