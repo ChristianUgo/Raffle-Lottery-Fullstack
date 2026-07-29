@@ -9,7 +9,7 @@ import {
 } from "@/constants";
 import { formatEther } from "viem";
 import { motion } from "framer-motion";
-import { Loader2 } from "lucide-react";
+import { Loader2, Minus, Plus, Ticket, WalletCards } from "lucide-react";
 import toast from "react-hot-toast";
 
 export function EnterLottery() {
@@ -72,51 +72,69 @@ export function EnterLottery() {
   const costInPol = entranceFee ? formatEther((entranceFee ) * BigInt(tickets)) : "0";
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 glass-card rounded-3xl max-w-lg mx-auto relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-tr from-violet-600/20 to-fuchsia-600/20 z-0" />
-      
-      <div className="relative z-10 w-full flex flex-col items-center">
-        <h2 className="text-3xl font-bold mb-2">Buy Tickets</h2>
-        <p className="text-zinc-400 mb-8 text-center">
-          Increase your chances of winning by purchasing multiple tickets!
-        </p>
+    <section className="glass-card relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] p-6 sm:p-10">
+      <div className="pointer-events-none absolute right-0 top-0 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-3xl" />
+      <div className="relative z-10 grid items-center gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+        <div>
+          <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-400/20 bg-violet-500/10">
+            <Ticket className="h-6 w-6 text-violet-300" />
+          </div>
+          <p className="section-label mb-3">Enter the live draw</p>
+          <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">Choose your tickets</h2>
+          <p className="mt-4 max-w-md text-sm leading-6 text-zinc-400">
+            Each ticket is recorded by the lottery contract. Select an amount,
+            review the total, then approve the transaction in your wallet.
+          </p>
+          <div className="mt-6 flex items-center gap-3 rounded-xl border border-white/8 bg-white/[0.03] p-3 text-xs text-zinc-400">
+            <WalletCards className="h-5 w-5 shrink-0 text-cyan-300" />
+            Payment is made directly from your connected wallet in POL.
+          </div>
+        </div>
 
-        <div className="flex items-center gap-4 mb-6 bg-black/40 p-2 rounded-2xl border border-white/10">
+        <div className="rounded-2xl border border-white/8 bg-black/25 p-4 sm:p-6">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-zinc-500">Number of tickets</p>
+          <div className="mb-4 flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-2">
           <button
             onClick={() => setTickets(Math.max(1, tickets - 1))}
-            className="w-12 h-12 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 active:scale-95 transition text-2xl font-bold"
+            className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/8 bg-white/5 text-white transition hover:border-violet-400/30 hover:bg-violet-400/10 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
             disabled={isLoading}
+            aria-label="Remove one ticket"
           >
-            -
+            <Minus className="h-5 w-5" />
           </button>
-          <div className="text-4xl font-black w-16 text-center text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-fuchsia-300">
+          <div className="w-20 text-center text-4xl font-black text-white">
             {tickets}
           </div>
           <button
             onClick={() => setTickets(tickets + 1)}
-            className="w-12 h-12 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 active:scale-95 transition text-2xl font-bold"
+            className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/8 bg-white/5 text-white transition hover:border-violet-400/30 hover:bg-violet-400/10 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
             disabled={isLoading}
+            aria-label="Add one ticket"
           >
-            +
+            <Plus className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Ticket Presets */}
-        <div className="flex items-center gap-2 mb-8">
+        <div className="mb-5 grid grid-cols-4 gap-2">
           {[1, 3, 5, 10].map((count) => (
             <button
               key={count}
               onClick={() => setTickets(count)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
+              className={`rounded-xl border px-2 py-2.5 text-xs font-bold transition ${
                 tickets === count
-                  ? "bg-violet-600/30 border-violet-500 text-white shadow-[0_0_15px_rgba(139,92,246,0.4)]"
-                  : "bg-white/5 border-white/10 text-zinc-400 hover:bg-white/10"
+                  ? "border-violet-400/60 bg-violet-500/20 text-violet-100"
+                  : "border-white/8 bg-white/[0.03] text-zinc-400 hover:border-white/15 hover:bg-white/[0.06]"
               }`}
               disabled={isLoading}
             >
-              {count}x Ticket{count > 1 ? "s" : ""}
+              {count} ticket{count > 1 ? "s" : ""}
             </button>
           ))}
+        </div>
+
+        <div className="mb-5 flex items-center justify-between rounded-xl border border-white/8 bg-white/[0.03] px-4 py-3">
+          <span className="text-sm font-semibold text-zinc-400">Total due</span>
+          <span className="text-lg font-black text-white">{costInPol} POL</span>
         </div>
 
         <motion.button
@@ -124,7 +142,7 @@ export function EnterLottery() {
           whileTap={{ scale: 0.97 }}
           onClick={handleEnter}
           disabled={isLoading || !entranceFee || !LOTTERY_PROJECT_IS_CONFIGURED}
-          className="w-full py-4 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 font-bold text-lg hover:shadow-[0_0_35px_rgba(168,85,247,0.6)] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed border border-white/20"
+          className="flex min-h-14 w-full items-center justify-center rounded-xl border border-white/15 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 px-5 py-4 text-base font-extrabold text-white shadow-[0_14px_35px_rgba(124,58,237,0.22)] transition-all hover:shadow-[0_18px_45px_rgba(168,85,247,0.4)] disabled:cursor-not-allowed disabled:opacity-45"
         >
           {isLoading ? (
             <div className="flex items-center gap-2">
@@ -138,12 +156,13 @@ export function EnterLottery() {
           )}
         </motion.button>
         {!LOTTERY_PROJECT_IS_CONFIGURED && (
-          <p className="mt-4 text-center text-sm text-amber-300">
+          <p className="mt-4 text-center text-xs leading-5 text-amber-300">
             The public interface is live. Ticket purchases will unlock after
             the verified Polygon Amoy VRF contract is connected.
           </p>
         )}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

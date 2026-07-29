@@ -24,7 +24,12 @@ const queryClient = new QueryClient();
 
 export function Web3Provider({ children }) {
   const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => setMounted(true), []);
+
+  React.useEffect(() => {
+    // RainbowKit relies on browser wallet APIs, so render it after hydration.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   return (
     <WagmiProvider config={config}>

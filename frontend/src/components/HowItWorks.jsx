@@ -22,27 +22,33 @@ export function HowItWorks() {
   ];
 
   return (
-    <div className="mt-20 max-w-5xl mx-auto w-full">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold tracking-tight mb-4">How it Works</h2>
-        <p className="text-zinc-400 max-w-2xl mx-auto">
-          A fully decentralized lottery powered by Chainlink. Trust the code, not the casino.
+    <section className="mx-auto mt-28 w-full max-w-6xl">
+      <div className="mb-12 max-w-2xl">
+        <p className="section-label mb-3">Simple. Transparent. Verifiable.</p>
+        <h2 className="text-3xl font-black tracking-tight text-white sm:text-5xl">How every draw works</h2>
+        <p className="mt-4 text-sm leading-6 text-zinc-400 sm:text-base">
+          Three onchain steps take you from ticket purchase to an automated,
+          cryptographically verifiable payout.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {steps.map((step, index) => (
-          <div key={index} className="glass-card rounded-2xl p-8 flex flex-col items-center text-center">
-            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-6">
+          <article key={index} className="glass-card relative flex min-h-72 flex-col rounded-2xl p-7">
+            <span className="absolute right-6 top-5 text-5xl font-black text-white/[0.035]">0{index + 1}</span>
+            <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-xl border border-white/8 bg-white/[0.04]">
               {step.icon}
             </div>
-            <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-            <p className="text-zinc-400 leading-relaxed text-sm">
+            <h3 className="mb-3 text-lg font-extrabold text-white">{step.title}</h3>
+            <p className="text-sm leading-6 text-zinc-400">
               {step.description}
             </p>
-          </div>
+            <div className="mt-auto pt-6">
+              <div className="h-px bg-gradient-to-r from-violet-400/40 to-transparent" />
+            </div>
+          </article>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
